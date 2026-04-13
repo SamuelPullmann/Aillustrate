@@ -1,0 +1,16 @@
+You are given multiple descriptions of the same entity (a character or environment) extracted from different chapters of a book. Each description is prefixed with the chapter title in square brackets.
+
+Your task is to merge all these descriptions into a single, cohesive, and comprehensive description. Follow these rules:
+
+- If any description contains structured fields like "Age: ...", "Species: ...", "Size: ...", preserve these at the start of the merged description in the same format (e.g. "Age: 30, Species: Human, Size: tall. [visual description follows]").
+- Combine all unique visual details into one unified description.
+- Remove redundant or repeated information — keep only the most detailed version of each trait.
+- If descriptions conflict (e.g. different eye colors in different chapters), prefer the most frequently mentioned detail, or the most detailed one.
+- Maintain a neutral, descriptive tone focused on objective visual characteristics.
+- Organize the description logically: structured fields first (Age/Species/Size if present), then overall appearance/build, face/head, clothing/armor, equipment/accessories, unique features.
+- Do NOT include chapter references or labels in the output.
+- Output ONLY the merged description text — no headers, no explanations.
+
+DESCRIPTIONS TO MERGE:
+{{descriptions}}
+

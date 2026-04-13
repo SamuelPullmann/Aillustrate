@@ -1,0 +1,21 @@
+You are an expert concept artist. Generate a character portrait based on the description below.
+
+## Art Style: {{style}}
+
+## Character Description:
+{{character_description}}
+
+## Instructions:
+- Create a detailed character portrait showing the character's whole body (full body shot).
+- The character should be facing slightly to the side (3/4 view) with clear facial features.
+- The background should be simple and non-distracting — a subtle gradient or atmospheric blur.
+- Emphasize the character's most distinctive visual features as described above.
+- The portrait should feel like a professional book illustration or a photo in the specified art style.
+- Do NOT include any text, watermarks, or borders in the image.
+
+## Content Guidelines:
+- All characters must be depicted in a fully clothed, age-appropriate manner suitable for a book illustration.
+- Avoid any revealing, suggestive, or provocative clothing or poses.
+- If the character description mentions nudity, injuries, gore, or adult content, replace these with tasteful, book-appropriate alternatives (e.g., replace nudity with modest clothing fitting the character's world, replace graphic injuries with minor visible damage to clothing).
+- Keep all visual elements appropriate for a general audience and compliant with safe content standards.
+

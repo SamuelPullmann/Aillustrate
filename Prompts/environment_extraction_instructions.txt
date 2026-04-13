@@ -1,0 +1,24 @@
+From the provided text, meticulously extract all objective and observable visual characteristics and physical attributes of the environments, settings, and locations. Focus exclusively on concrete details describing spatial layout, architecture, terrain, biome, structural elements, materials, textures, colors, and ambient conditions. Systematically enumerate every visual detail mentioned, ensuring nothing is omitted. Pay close attention to descriptions of lighting, weather, atmospheric effects (e.g., 'fog', 'dust motes'), and specific visual phenomena that define the space. Exclude all narrative context, historical background, emotional resonance, subjective interpretations, or non-visual sensory information (such as smells or ambient sounds), unless a sound has a direct, explicit visual manifestation.
+
+Maintain a neutral and precise tone, focusing entirely on factual visual data, and ensure consistency in terminology for similar spatial elements across different scenes. Crucially, if the text describes any distinct props, furniture, localized flora, vehicles, or architectural focal points within the environment, ensure these are detailed as separate entities with their own visual descriptions (e.g., 'Focal Object: [Object Name] - [Visual description of object]'), including their material, texture, condition, and any active visual effects. Prioritize precise color descriptions and specific iconic markings, structural damage, or signs of wear and tear (e.g., 'crumbling', 'overgrown', 'polished').
+
+Ensure all elements described are directly visible and contribute to the physical reality of the setting. Explicitly list any light sources—both natural and artificial—as distinct elements, providing their full visual description, including the color, intensity, and direction of the light, as well as the shape and nature of the shadows they cast. When extracting visual details, explicitly differentiate between the macro-environment (e.g., 'skyline', 'mountain range', 'cavern ceiling') and the micro-environment (e.g., 'ground cover', 'wall texture', 'immediate pathway').
+
+Focus on observable facts, avoiding any interpretations or inferences about the location's purpose or history beyond what is explicitly described visually. Do not include any descriptions that refer to the environment's general vibe or abstract metaphorical comparisons (e.g., 'a tomb of despair'). Critically, if the text implies a passage of time or a shift in weather without explicitly describing a visual change, extract only the visual state currently described. Disregard any non-visual sensory details. Explicitly describe any reflections, water surfaces, or interactions with light sources if they are part of the setting's visual makeup.
+
+If the text includes distinct visual patterns, structural geometries, or geographical formations, ensure they are clearly described with their location and scale. If a specific time of day is visually indicated (e.g., 'long shadows of dusk', 'harsh midday glare'), extract the specific visual indicators, not just the time itself. Ensure all extracted details are concise and directly observable visual facts. Explicitly distinguish between different rooms, zones, or distinct locations mentioned in the text.
+
+If the environment is in a state of transition or destruction (e.g., 'collapsing', 'flooding'), capture the exact visual state presented in the moment. When describing terrain or flooring, include texture, unevenness, and visible composition as primary features. Ensure a clear and comprehensive listing of all visual attributes without redundancy. If the source text specifies a general visual shape, architectural style, or silhouette for the structures, include this.
+
+Focus only on physical settings. Describe the geography, architecture, weather, lighting, props, and overall atmosphere. Do not include character actions or plot events in the environment description unless they permanently alter the setting.
+
+Important:
+Extract ONLY environments that appear in the following list of scene locations and are described in the text. If a scene location is not mentioned and described in the text, do NOT create an environment entry for it:
+{{SCENE_LOCATIONS}}
+
+CRITICAL RULES:
+- Create EXACTLY ONE environment entry per scene location listed above. Do NOT split a single location into multiple sub-areas or variations (e.g., do NOT create separate entries for "Castle Courtyard" and "Castle Interior" if the scene location is just "Castle" — create one entry called "Castle" with a comprehensive description covering all its visual aspects).
+- The environment name MUST match the scene location name EXACTLY as listed above. Do not rename, abbreviate, or expand the names.
+- If the list is empty, extract all significant environments found in the text, but still follow the one-environment-per-distinct-location rule.
+
+Provide a name and a detailed visual description for each.

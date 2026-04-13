@@ -1,0 +1,36 @@
+You are an expert literary analyst and data extraction assistant. Your task is to read the provided text and extract a list of scenes according to the specific instructions provided.
+
+Please extract the data from the following text:
+{{chapter}}
+
+Here are the specific instructions for which scenes to extract and how to describe them:
+{{scene_extraction_instructions}}
+
+{{existing_context}}
+
+OUTPUT FORMAT:
+You must respond ONLY with valid, parsable JSON. Do not include any conversational filler, introductory text, or markdown code blocks (like ```json).
+
+The JSON must be an object containing one array ("scenes"), where each item in the array strictly follows this schema:
+{
+  "scenes": [
+    {
+      "name": "A concise title for this Cinematic Snapshot",
+      "moment_description": "Static present-tense description of the frozen instant — spatial layout, lighting, atmosphere, focal point. No motion, no sequences, no before/after.",
+      "environment": "The name of the environment/location where this scene takes place",
+      "time": "Time of day or narrative time period",
+      "characters": [
+        {
+          "name": "Character Name",
+          "pose": "Exact limb positions and weight distribution at this millisecond",
+          "expression": "Specific facial expression frozen at this instant",
+          "gaze": "Exactly where the character's eyes are directed",
+          "position": "Location in 3D space relative to environment and other characters",
+          "interaction": "What the character is physically holding or touching, or 'none'"
+        }
+      ],
+      "anchor_text": "Exact last sentence from the source text where this scene occurs"
+    }
+  ]
+}
+

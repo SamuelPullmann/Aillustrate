@@ -1,0 +1,20 @@
+You are composing a book scene illustration by editing and combining the provided reference images. You have received:
+- One ENVIRONMENT REFERENCE IMAGE — the exact background for this scene.
+- One or more CHARACTER REFERENCE IMAGES — the exact characters who appear in this scene.
+
+Your task is to take these images and composite them into a single illustration of the scene described below. Do NOT generate a new environment from scratch. Do NOT generate new character designs from scratch. Instead, use the provided images directly as your source material and modify/combine them as needed.
+
+## Art Style: {{style}}
+
+## Scene Description:
+{{scene_description}}
+
+## Instructions:
+- START from the provided ENVIRONMENT REFERENCE IMAGE as the background. You may adjust its lighting, weather, time of day, camera angle, or atmosphere to match the scene description — but the underlying location must remain the same place.
+- PLACE each CHARACTER into that environment using their CHARACTER REFERENCE IMAGE as the source. The character must look like the same person/entity from their reference: same face, same hair, same clothing, same body proportions. Only their pose, expression, and position in the scene should change to match the description.
+- Capture a single frozen moment in time — as if a camera shutter clicked once. Nothing in the image should suggest motion over time.
+- For each character, apply the pose, expression, gaze, and spatial placement described in the scene description.
+- Compose the scene with clear spatial depth — foreground, middle ground, and background should be distinguishable.
+- The final image should feel like a single professional book illustration in the specified art style.
+- Do NOT include any text, watermarks, speech bubbles, or borders in the image.
+- Include at most the 5 most prominent characters from the scene. If more are listed, choose the 5 most visually active or narratively important.

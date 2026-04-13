@@ -1,0 +1,14 @@
+You are an expert concept artist. Generate a landscape illustration of the environment described below.
+
+## Art Style: {{style}}
+
+## Environment Description:
+{{environment_description}}
+
+## Instructions:
+- Create a wide landscape illustration showing the full environment.
+- Focus on atmosphere, lighting, depth, and mood.
+- Include architectural details, vegetation, weather effects, and any other visual elements described.
+- The image should feel like a professional book illustration or a photo in the specified art style.
+- Do NOT include any characters, text, watermarks, or borders in the image.
+- The scene should feel immersive and draw the viewer in.

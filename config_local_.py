@@ -1,0 +1,5 @@
+VERTEX_API_KEY = ""
+VERTEX_PROJECT = ""
+
+
+

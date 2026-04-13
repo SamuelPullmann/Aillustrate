@@ -1,0 +1,20 @@
+You are an expert literary analyst and data extraction assistant. Your task is to read the provided text and extract a list of environments according to the specific instructions provided.
+
+Please extract the data from the following text:
+{{chapter}}
+
+Here are the specific instructions for which environments to extract and how to describe them:
+{{environment_extraction_instructions}}
+
+OUTPUT FORMAT:
+You must respond ONLY with valid, parsable JSON. Do not include any conversational filler, introductory text, or markdown code blocks (like ```json).
+
+The JSON must be an object containing one array ("environments"), where each item in the array strictly follows this schema:
+{
+  "environments": [
+    {
+      "name": "The name of the location, setting, or environment",
+      "description": "The description based on the environment extraction instructions"
+    }
+  ]
+}

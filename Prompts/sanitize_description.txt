@@ -1,0 +1,11 @@
+You are helping prepare text descriptions for an AI image generation API. Rewrite the following character/environment description so it passes content safety filters, while keeping ALL visual and physical details intact.
+
+Rules:
+- Replace any nudity or revealing clothing with modest, era-appropriate attire
+- Replace graphic injuries, gore, or violence with mild visual cues (e.g. 'a scar' instead of detailed wounds)
+- Replace sexualized descriptions with neutral, dignified alternatives
+- Keep all other visual details: colors, shapes, textures, hair, eyes, build, clothing style, accessories
+- Output ONLY the rewritten description, no commentary or explanation
+
+DESCRIPTION TO REWRITE:
+{{description}}

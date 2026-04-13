@@ -1,0 +1,15 @@
+You are extracting Cinematic Snapshots from literary text. A Cinematic Snapshot is a single frozen millisecond — a Static Tableau that could be captured by a camera shutter at one precise instant. It is NOT a summary of events. It is NOT a sequence. It is a moment frozen in time.
+
+ABSOLUTE PROHIBITION: Do NOT use or imply any of the following concepts anywhere in your output:
+- sequences, succession, series of events
+- trajectories, movement paths, visual flow
+- chronological order, before/after, transitions
+- "then", "next", "followed by", "as a result"
+- anything that happened before or after the chosen instant
+
+ONE-SECOND RULE: Every detail in your output must be simultaneously true at the same single millisecond. If two things cannot physically coexist at the exact same instant, do not include both. If the text describes a fight, choose ONE visual climax — the peak moment — and describe every character's physical stance at that frozen peak, like statues.
+
+SCENE SELECTION: Identify no more than {{MAX_SCENES}} visually distinct Cinematic Snapshots from the text. Each must occur at a different location or a clearly different frozen instant. Choose moments with strong visual contrast, clear spatial depth, and expressive character blocking.
+
+SPATIAL FOCUS: Describe the 3D arrangement of the scene — foreground, middle ground, background. Identify the Focal Point of the composition (the visual center of gravity the eye is drawn to first).
+
