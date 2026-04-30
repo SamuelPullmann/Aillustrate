@@ -44,6 +44,14 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
         page.generating_ids = set()
     generating_ids = page.generating_ids
 
+    def _is_attached(ctrl):
+        try:
+            return bool(ctrl and ctrl.page)
+        except RuntimeError:
+            return False
+        except Exception:
+            return False
+
     error_ref = {"value": ""}
     if not hasattr(page, "gen_status"):
         page.gen_status = {}
@@ -193,7 +201,7 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
             if ev.is_set():
                 return
             gen_status[eid] = msg
-            if wrapper_ref["container"] and wrapper_ref["container"].page:
+            if wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                 rebuild()
 
         def work(ev=cancel_event):
@@ -204,11 +212,12 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
                 )
                 if not ev.is_set():
                     env.refinement_history.clear()
+                    env.image_path_history.clear()
                     save_project(project, project_store.project_dir)
             except InterruptedError:
                 pass
             except Exception as exc:
-                if not ev.is_set() and wrapper_ref["container"] and wrapper_ref["container"].page:
+                if not ev.is_set() and wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                     _show_error(f"Environment image generation failed: {exc}")
 
             if page.cancel_events.get(env.id) is ev:
@@ -216,16 +225,23 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
                 if env.id in generating_ids:
                     generating_ids.discard(env.id)
                 gen_status.pop(env.id, None)
-                if wrapper_ref["container"] and wrapper_ref["container"].page:
+                if wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                     rebuild()
+                    try:
+                        page.update()
+                    except Exception:
+                        pass
 
         page.run_thread(work)
 
     def on_undo(_e):
         env = get_env(selected_ref["value"])
-        if not env or not env.image_path_history or env.id in generating_ids:
+        if not env or len(env.image_path_history) < 2 or env.id in generating_ids:
             return
-        env.image_path = env.image_path_history.pop()
+        env.image_path_history.pop()
+        if env.refinement_history:
+            env.refinement_history.pop()
+        env.image_path = env.image_path_history[-1]
         _save()
         rebuild()
 
@@ -246,12 +262,10 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
                 old_path = env.image_path
                 new_path = edit_image(env.image_path, text)
                 if not local_cancel.get("cancelled", False):
-                    if not hasattr(env, 'image_path_history'):
-                        env.image_path_history = []
-                    env.image_path_history.append(old_path)
+                    if not env.image_path_history:
+                        env.image_path_history.append(old_path)
+                    env.image_path_history.append(new_path)
                     env.image_path = new_path
-                    if not hasattr(env, 'refinement_history'):
-                        env.refinement_history = []
                     env.refinement_history.append(text)
                     save_project(project, project_store.project_dir)
                 else:
@@ -260,13 +274,17 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
                     except Exception:
                         pass
             except Exception as exc:
-                if not local_cancel.get("cancelled", False) and wrapper_ref["container"] and wrapper_ref["container"].page:
+                if not local_cancel.get("cancelled", False) and wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                     _show_error(f"Environment image edit failed: {exc}")
 
             if env.id in generating_ids:
                 generating_ids.remove(env.id)
-            if wrapper_ref["container"] and wrapper_ref["container"].page:
+            if wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                 rebuild()
+                try:
+                    page.update()
+                except Exception:
+                    pass
 
         page.run_thread(work)
 
@@ -603,35 +621,28 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
         )
 
         def rollback_history(index: int):
-            if not env or not env.image_path:
+            if not env:
                 return
-            img_history = getattr(env, 'image_path_history', [])
-            ref_history = getattr(env, 'refinement_history', [])
-            try:
-                if index + 1 < len(img_history):
-                    target_path = img_history[index + 1]
-                elif index == len(ref_history) - 1:
-                    target_path = env.image_path
-                    return
-                else:
-                    return
-                if target_path and Path(target_path).is_file():
-                    env.image_path = target_path
-                    _save()
-                    rebuild()
-            except Exception as exc:
-                _show_error(f"Rollback failed: {exc}")
+            img_history = env.image_path_history
+            target_index = index + 1
+            if target_index >= len(img_history):
+                return
+            target_path = img_history[target_index]
+            if target_path and Path(target_path).is_file():
+                env.image_path = target_path
+                _save()
+                rebuild()
 
         def delete_history_entry(index: int):
             if not env:
                 return
-            ref_history = getattr(env, 'refinement_history', [])
-            img_history = getattr(env, 'image_path_history', [])
-            if index < 0 or index >= len(ref_history):
+            if index < 0 or index >= len(env.refinement_history):
                 return
-            ref_history.pop(index)
-            if index < len(img_history):
-                img_history.pop(index)
+            env.refinement_history.pop(index)
+            img_index = index + 1
+            if img_index < len(env.image_path_history):
+                env.image_path_history.pop(img_index)
+            env.image_path = env.image_path_history[-1] if env.image_path_history else None
             _save()
             rebuild()
 
@@ -640,7 +651,7 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
             history_items.append(ft.Container(height=4))
             history_items.append(ft.Text("REFINEMENT HISTORY", size=11, color="#666666", weight=ft.FontWeight.W_600))
             for idx, text in enumerate(env.refinement_history):
-                img_history = getattr(env, 'image_path_history', [])
+                img_history = env.image_path_history
                 if idx + 1 < len(img_history):
                     thumb_path = img_history[idx + 1]
                 elif idx == len(env.refinement_history) - 1:
@@ -769,7 +780,7 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
                                     icon=ft.Icons.UNDO, icon_size=16, icon_color="#aaaaaa",
                                     on_click=on_undo, tooltip="Undo last generation",
                                     width=32, height=32,
-                                    visible=bool(getattr(env, 'image_path_history', None)) if env else False
+                                    visible=bool(env and getattr(env, 'image_path_history', None))
                                 ),
                                 ft.Row(expand=True),
                             ], spacing=4, vertical_alignment=ft.CrossAxisAlignment.CENTER),
@@ -831,7 +842,7 @@ def build_environments_view(page: ft.Page, on_tab_change, project_store: Project
 
     def rebuild():
         try:
-            if wrapper_ref["container"] and getattr(wrapper_ref["container"], "page", None):
+            if wrapper_ref["container"] and _is_attached(wrapper_ref["container"]):
                 new_content = build_view_content()
                 wrapper_ref["container"].content = new_content
                 wrapper_ref["container"].update()

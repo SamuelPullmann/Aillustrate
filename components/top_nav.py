@@ -52,13 +52,10 @@ def build_top_nav(
 
     brand = ft.Row(
         controls=[
-            ft.Container(
-                content=ft.Text("S", size=12, weight=ft.FontWeight.BOLD, color="#ffffff"),
-                bgcolor=ACCENT,
-                border_radius=5,
+            ft.Image(
+                src="assets/icon.png",
                 width=24,
                 height=24,
-                alignment=ft.Alignment.CENTER,
             ),
             ft.Text(
                 "Aillustrate",

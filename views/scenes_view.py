@@ -359,14 +359,21 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
                 gen_status.pop(scene.id, None)
                 if _is_attached(wrapper_ref.get("container")):
                     rebuild()
+                    try:
+                        page.update()
+                    except Exception:
+                        pass
 
         page.run_thread(work)
 
     def on_undo(_e):
         scene = get_scene(selected_ref["value"])
-        if not scene or not getattr(scene, "image_path_history", []) or scene.id in generating_ids:
+        if not scene or len(getattr(scene, 'image_path_history', [])) < 2 or scene.id in generating_ids:
             return
-        scene.image_path = scene.image_path_history.pop()
+        scene.image_path_history.pop()
+        if scene.refinement_history:
+            scene.refinement_history.pop()
+        scene.image_path = scene.image_path_history[-1]
         _save()
         rebuild()
 
@@ -388,7 +395,9 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
                 if not global_cancel_ref["cancelled"]:
                     if not hasattr(scene, 'image_path_history'):
                         scene.image_path_history = []
-                    scene.image_path_history.append(old_path)
+                    if not scene.image_path_history:
+                        scene.image_path_history.append(old_path)
+                    scene.image_path_history.append(new_path)
                     scene.image_path = new_path
                     if not hasattr(scene, 'refinement_history'):
                         scene.refinement_history = []
@@ -406,6 +415,10 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
             generating_ids.discard(scene.id)
             if _is_attached(wrapper_ref.get("container")):
                 rebuild()
+                try:
+                    page.update()
+                except Exception:
+                    pass
 
         page.run_thread(work)
 
@@ -845,24 +858,17 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
         )
 
         def rollback_history(index: int):
-            if not scene or not scene.image_path:
+            if not scene:
                 return
             img_history = getattr(scene, 'image_path_history', [])
-            ref_history = getattr(scene, 'refinement_history', [])
-            try:
-                if index + 1 < len(img_history):
-                    target_path = img_history[index + 1]
-                elif index == len(ref_history) - 1:
-                    target_path = scene.image_path
-                    return  # Already at latest
-                else:
-                    return
-                if target_path and Path(target_path).is_file():
-                    scene.image_path = target_path
-                    _save()
-                    rebuild()
-            except Exception as exc:
-                _show_error(f"Rollback failed: {exc}")
+            target_index = index + 1
+            if target_index >= len(img_history):
+                return
+            target_path = img_history[target_index]
+            if target_path and Path(target_path).is_file():
+                scene.image_path = target_path
+                _save()
+                rebuild()
 
         def delete_history_entry(index: int):
             if not scene:
@@ -872,8 +878,10 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
             if index < 0 or index >= len(ref_history):
                 return
             ref_history.pop(index)
-            if index < len(img_history):
-                img_history.pop(index)
+            img_index = index + 1
+            if img_index < len(img_history):
+                img_history.pop(img_index)
+            scene.image_path = img_history[-1] if img_history else None
             _save()
             rebuild()
 
@@ -1080,6 +1088,7 @@ def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore 
                 page.update()
         except Exception:
             pass
+
 
     return ft.Column(
         controls=[nav, wrapper, build_footer_bar()],

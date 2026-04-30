@@ -301,7 +301,6 @@ def main(page: ft.Page):
         show_workspace("Characters")
 
     def on_tab_change(tab_name: str):
-        workspace_views.clear()
         show_workspace(tab_name)
 
     def on_keyboard(e):

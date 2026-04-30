@@ -19,6 +19,7 @@ def build_chat_input(hint: str = "Change hair to red, add a scar...", on_submit=
         min_lines=1,
         max_lines=3,
         shift_enter=True,
+        on_submit=lambda e: _handle_submit(e.control.value, e.control),
     )
 
     def _handle_submit(value: str, field: ft.TextField):

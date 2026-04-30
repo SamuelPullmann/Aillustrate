@@ -101,7 +101,7 @@ def _is_content_policy_response(response) -> bool:
     return False
 
 
-def _call_with_retry(model, *args, max_retries: int = 15, on_retry_status=None, cancel_event: threading.Event = None, **kwargs):
+def _call_with_retry(model, *args, max_retries: int = 100, on_retry_status=None, cancel_event: threading.Event = None, **kwargs):
     delay = 15
     for attempt in range(max_retries):
         if cancel_event and cancel_event.is_set():
@@ -542,16 +542,18 @@ def edit_image(
 
 
 def undo_image_edit(entity) -> bool:
-    history = getattr(entity, "image_path_history", None)
-    if not history:
+    # image_path_history[i] = path before refinement i was applied
+    img_history = getattr(entity, "image_path_history", None)
+    ref_history = getattr(entity, "refinement_history", None)
+    if not img_history:
         return False
 
-    previous_path = history.pop()
+    previous_path = img_history.pop()
+    if ref_history:
+        ref_history.pop()
+
     if previous_path and Path(previous_path).is_file():
         entity.image_path = previous_path
-        ref_history = getattr(entity, "refinement_history", None)
-        if ref_history:
-            ref_history.pop()
         return True
 
     return False

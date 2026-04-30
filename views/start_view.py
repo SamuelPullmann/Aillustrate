@@ -521,7 +521,7 @@ def build_start_view(page: ft.Page, on_open_project, file_picker=None, on_analyz
         content=ft.Column(
             controls=[
                 ft.Icon(ft.Icons.UPLOAD_FILE_OUTLINED, size=32, color="#555555"),
-                ft.Text("Drop your story files here", size=14, weight=ft.FontWeight.W_600, color="#888888", text_align=ft.TextAlign.CENTER),
+                ft.Text("Click to select a story file", size=14, weight=ft.FontWeight.W_600, color="#888888", text_align=ft.TextAlign.CENTER),
                 ft.Text("(.txt, .pdf, .epub)", size=11, color="#555555", text_align=ft.TextAlign.CENTER),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -549,7 +549,7 @@ def build_start_view(page: ft.Page, on_open_project, file_picker=None, on_analyz
 
     threshold_label = ft.Text(f"CHARACTER THRESHOLD: {int(threshold_ref['value'])}%", size=11, color="#888888", weight=ft.FontWeight.W_600)
 
-    def on_threshold_change(e):
+    def on_threshold_change_end(e):
         threshold_ref["value"] = e.control.value
         threshold_label.value = f"CHARACTER THRESHOLD: {int(e.control.value)}%"
         try:
@@ -562,7 +562,7 @@ def build_start_view(page: ft.Page, on_open_project, file_picker=None, on_analyz
         divisions=20, label="{value}%",
         active_color=ACCENT,
         inactive_color="#333333",
-        on_change=on_threshold_change,
+        on_change_end=on_threshold_change_end,
         expand=True,
     )
 
@@ -769,10 +769,10 @@ def build_start_view(page: ft.Page, on_open_project, file_picker=None, on_analyz
         content=ft.Row(
             controls=[
                 ft.Row(controls=[
-                    ft.Container(
-                        content=ft.Text("S", size=14, weight=ft.FontWeight.BOLD, color="#ffffff"),
-                        bgcolor=ACCENT, border_radius=6, width=28, height=28,
-                        alignment=ft.Alignment.CENTER,
+                    ft.Image(
+                        src="assets/icon.png",
+                        width=28,
+                        height=28,
                     ),
                     ft.Text("Aillustrate", size=15, weight=ft.FontWeight.BOLD, color="#ffffff"),
                 ], spacing=8),

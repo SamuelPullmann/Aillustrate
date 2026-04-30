@@ -255,6 +255,10 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
                 gen_status.pop(char.id, None)
                 if _is_attached(wrapper_ref.get("container")):
                     rebuild()
+                    try:
+                        page.update()
+                    except Exception:
+                        pass
 
         page.run_thread(work)
 
@@ -268,9 +272,12 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
 
     def on_undo(_e):
         char = get_char(selected_ref["value"])
-        if not char or not getattr(char, "image_path_history", []) or char.id in generating_ids:
+        if not char or len(getattr(char, 'image_path_history', [])) < 2 or char.id in generating_ids:
             return
-        char.image_path = char.image_path_history.pop()
+        char.image_path_history.pop()
+        if char.refinement_history:
+            char.refinement_history.pop()
+        char.image_path = char.image_path_history[-1]
         _save()
         rebuild()
 
@@ -291,10 +298,11 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
                 old_path = char.image_path
                 new_path = edit_image(char.image_path, text)
                 if not local_cancel.get("cancelled", False):
-                    # Push old path to history for undo support
                     if not hasattr(char, 'image_path_history'):
                         char.image_path_history = []
-                    char.image_path_history.append(old_path)
+                    if not char.image_path_history:
+                        char.image_path_history.append(old_path)
+                    char.image_path_history.append(new_path)
                     char.image_path = new_path
                     if not hasattr(char, 'refinement_history'):
                         char.refinement_history = []
@@ -313,6 +321,10 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
                 generating_ids.remove(char.id)
             if _is_attached(wrapper_ref.get("container")):
                 rebuild()
+                try:
+                    page.update()
+                except Exception:
+                    pass
 
         page.run_thread(work)
 
@@ -599,24 +611,17 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
         )
 
         def rollback_history(index: int):
-            if not char or not char.image_path:
+            if not char:
                 return
             img_history = getattr(char, 'image_path_history', [])
-            ref_history = getattr(char, 'refinement_history', [])
-            try:
-                if index + 1 < len(img_history):
-                    target_path = img_history[index + 1]
-                elif index == len(ref_history) - 1:
-                    target_path = char.image_path
-                    return
-                else:
-                    return
-                if target_path and Path(target_path).is_file():
-                    char.image_path = target_path
-                    _save()
-                    rebuild()
-            except Exception as exc:
-                _show_error(f"Rollback failed: {exc}")
+            target_index = index + 1
+            if target_index >= len(img_history):
+                return
+            target_path = img_history[target_index]
+            if target_path and Path(target_path).is_file():
+                char.image_path = target_path
+                _save()
+                rebuild()
 
         def delete_history_entry(index: int):
             if not char:
@@ -626,8 +631,10 @@ def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectSt
             if index < 0 or index >= len(ref_history):
                 return
             ref_history.pop(index)
-            if index < len(img_history):
-                img_history.pop(index)
+            img_index = index + 1
+            if img_index < len(img_history):
+                img_history.pop(img_index)
+            char.image_path = img_history[-1] if img_history else None
             _save()
             rebuild()
 
