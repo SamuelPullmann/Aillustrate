@@ -5,6 +5,12 @@ import uuid
 
 @dataclass
 class Character:
+    """Represents a character extracted from the book.
+
+    ``image_path_history`` stores the sequence of image paths in the order
+    [original, after_refine_1, after_refine_2, ...] to enable undo/rollback.
+    ``refinement_history`` stores the corresponding user instructions.
+    """
     name: str
     merged_description: str = ""
     descriptions_by_chapter: list[str] = field(default_factory=list)

@@ -6,12 +6,14 @@ from models.project import Project
 
 @dataclass
 class ProjectStore:
+    """Holds the currently open project and its folder path."""
     current_project: Project | None = None
     project_dir: Path | None = None
 
 
 @dataclass
 class UIStore:
+    """Tracks transient UI state shared across views (active tab, selections, etc.)."""
     current_screen: str = "start"
     active_tab: str = "Characters"
     is_analyzing_book: bool = False

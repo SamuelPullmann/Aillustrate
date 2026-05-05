@@ -40,6 +40,13 @@ def _action_btn(label, icon, on_click, bgcolor="#2a2a2a", border_color="#444444"
 
 
 def build_characters_view(page: ft.Page, on_tab_change, project_store: ProjectStore = None, ui_store=None, on_home=None, on_save=None, on_save_as=None) -> ft.Column:
+    """Build the Characters tab view.
+
+    Shows a sidebar list of all characters, a central image canvas and a right
+    panel with description, seed controls and refinement history.
+    Supports AI portrait generation, image refinement via the chat input,
+    undo/rollback of refinements and manual character creation.
+    """
     project = project_store.current_project if project_store else None
     characters = project.characters if project else []
 

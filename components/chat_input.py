@@ -4,6 +4,13 @@ ACCENT = "#7c3aed"
 
 
 def build_chat_input(hint: str = "Change hair to red, add a scar...", on_submit=None, on_cancel=None, is_generating: bool = False, generating_message="Generating image…") -> ft.Container:
+    """Build the image-refinement chat input widget.
+
+    Shows a text field with a send button when idle.
+    When ``is_generating`` is True, replaces the field with a progress indicator
+    and a cancel button; ``on_cancel`` is called when the user clicks cancel.
+    ``on_submit(text)`` is called on Enter or send-button click.
+    """
     text_field = ft.TextField(
         hint_text=hint,
         hint_style=ft.TextStyle(color="#555555", size=13),

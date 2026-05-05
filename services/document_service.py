@@ -14,6 +14,7 @@ from models.chapter import Chapter
 
 
 def read_file_text(file_path: str) -> str:
+    """Extract the full text content from a .txt, .pdf or .epub file."""
     ext = os.path.splitext(file_path)[1].lower()
 
     if ext == ".txt":
@@ -29,6 +30,7 @@ def read_file_text(file_path: str) -> str:
 
 
 def get_project_name_from_file(file_path: str) -> str:
+    """Return the filename without its extension, usable as a default project name."""
     return Path(file_path).stem
 
 
@@ -38,6 +40,10 @@ def split_into_chapters(file_path: str) -> list[Chapter]:
 
     Strategy (for PDF):
         1. Try splitting by PDF bookmarks first (most reliable).
+        2. Fall back to regex-based chapter detection in text.
+
+    Strategy (for EPUB):
+        1. Try splitting by the EPUB table of contents (TOC) first.
         2. Fall back to regex-based chapter detection in text.
 
     For TXT files only regex-based splitting is used.

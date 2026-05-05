@@ -4,6 +4,12 @@ ACCENT = "#7c3aed"
 
 
 def build_project_card(project: dict, on_open, on_delete=None) -> ft.Container:
+    """Build a clickable project card for the start screen.
+
+    ``project`` must contain at least ``id``, ``title`` and ``date``.
+    Calls ``on_open(project_id)`` on click.
+    If ``on_delete`` is provided, renders a delete icon button in the top-right corner.
+    """
     def clicked(_e, pid=project["id"]):
         try:
             on_open(pid)

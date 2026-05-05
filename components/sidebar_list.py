@@ -15,6 +15,13 @@ def build_sidebar_list(
     header_title: str = "Characters",
     header_icon=None,
 ) -> ft.Container:
+    """Build a generic filterable sidebar list with a search box and an add button.
+
+    Each item dict must contain ``id``, ``name`` and optionally ``initials``,
+    ``color`` and ``subtitle``.
+    Calls ``on_select(item_id)`` when a row is clicked and ``on_add()`` when
+    the add button is clicked.
+    """
     if header_icon is None:
         header_icon = ft.Icons.PERSON
 

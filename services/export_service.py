@@ -25,6 +25,13 @@ def _text_contains_anchor(text: str, anchor: str, min_length: int = 5) -> bool:
     return anchor_clean in text_clean
 
 def export_to_pdf(project: Project, project_dir: Path) -> str:
+    """Export the project to an illustrated PDF file.
+
+    If the original source is a PDF, scene images are inserted at their anchor
+    positions inside the source. Otherwise a new PDF is generated from the
+    chapter text with images embedded.
+    Returns the absolute path to the generated PDF.
+    """
     exports_dir = project_dir / "exports"
     exports_dir.mkdir(parents=True, exist_ok=True)
 

@@ -2,6 +2,7 @@ import flet as ft
 
 
 def build_status_bar() -> ft.Container:
+    """Build a minimal bottom status bar with a copyright notice."""
     return ft.Container(
         content=ft.Row(
             controls=[

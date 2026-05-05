@@ -7,6 +7,12 @@ ACCENT = "#7c3aed"
 
 
 def build_export_view(page: ft.Page, on_tab_change, project_store: ProjectStore = None, on_home=None, on_save=None, on_save_as=None) -> ft.Column:
+    """Build the Export tab view.
+
+    Lets the user choose between PDF and ePub export formats and trigger
+    the export. Shows a project summary (character, environment and scene counts)
+    and opens the export folder automatically on success.
+    """
     from components.top_nav import build_top_nav
 
     project = project_store.current_project if project_store else None

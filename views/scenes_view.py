@@ -28,6 +28,14 @@ def _initials(name: str) -> str:
 
 
 def build_scenes_view(page: ft.Page, on_tab_change, project_store: ProjectStore = None, ui_store=None, on_home=None, on_save=None, on_save_as=None) -> ft.Column:
+    """Build the Scenes tab view.
+
+    Shows a sidebar list of all scenes grouped by chapter, a central image canvas
+    and a right panel with scene description, character/environment assignment,
+    aspect ratio selector and refinement history.
+    Supports AI scene illustration generation using character and environment
+    reference images, chat-based refinement and undo/rollback.
+    """
     project = project_store.current_project if project_store else None
     characters = project.characters if project else []
     environments = project.environments if project else []

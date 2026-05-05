@@ -7,6 +7,10 @@ _view_models = {t: None for t in TABS}
 
 
 def get_active_model(view_name: str | None = None) -> str:
+    """Return the currently selected image model for the given view tab.
+
+    Falls back to the default model from config if no per-view model is set.
+    """
     import config as _config
     if view_name and view_name in _view_models and _view_models[view_name]:
         all_models = getattr(_config, 'IMAGE_MODELS', [])
@@ -28,6 +32,11 @@ def build_top_nav(
     on_save_as=None,
     project_store=None,
 ) -> ft.Container:
+    """Build the top navigation bar with tab buttons, model selector and style selector.
+
+    ``active_tab`` is highlighted and its model/style settings are shown.
+    ``on_tab_change(tab_name)`` is called when a tab is clicked.
+    """
 
     def tab_button(label: str) -> ft.Container:
         is_active = label == active_tab

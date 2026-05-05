@@ -5,6 +5,12 @@ import uuid
 
 @dataclass
 class Scene:
+    """Represents a key moment extracted from a chapter.
+
+    ``anchor_text`` is a short passage from the source text near this scene,
+    used to place the illustration at the correct position during export.
+    ``character_ids`` and ``environment_id`` link the scene to extracted entities.
+    """
     title: str
     description: str
     environment_id: str | None = None

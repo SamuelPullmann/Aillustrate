@@ -31,6 +31,14 @@ def _btn(content, on_click, bgcolor="#2a2a2a", border_color="#444444", radius=8,
 
 
 def build_start_view(page: ft.Page, on_open_project, file_picker=None, on_analyze=None) -> ft.Column:
+    """Build the start / home screen.
+
+    Left panel shows recent projects as clickable cards with open/delete actions.
+    Right panel lets the user pick a book file, set a project name, choose an art
+    style, configure the character threshold and trigger AI analysis.
+    Calls ``on_open_project(project_id)`` to open an existing project and
+    ``on_analyze(...)`` to start a new analysis run.
+    """
     selected_style_ref = {"value": "epic_fantasy"}
     art_style_container = ft.Ref[ft.Column]()
     drop_zone_ref = ft.Ref[ft.Container]()

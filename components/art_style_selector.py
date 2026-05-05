@@ -42,6 +42,12 @@ DETAILS_IMG_H = 520
 DETAILS_IMG_W = 300
 
 def build_art_style_selector(selected_id: str, on_select, page: ft.Page = None) -> ft.Column:
+    """Build the art style picker row with clickable style thumbnails.
+
+    Highlights the currently selected style. Calls ``on_select(style_id)`` on click.
+    If ``page`` is provided, also renders a "View Art Style Details" button that
+    opens a full-screen overlay with the style preview and prompt.
+    """
     base_selected_id = selected_id.split(" - ")[0] if selected_id else ""
 
     def style_btn(style: dict) -> ft.Column:

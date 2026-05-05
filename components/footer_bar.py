@@ -5,6 +5,11 @@ _footer_refs: list[ft.Ref] = []
 
 
 def set_rate_limit_error(msg: str | None):
+    """Set or clear the rate-limit warning shown in all footer bars.
+
+    Pass a message string to display it, or None to clear it.
+    Automatically refreshes all active footer instances.
+    """
     global _rate_limit_message
     _rate_limit_message = msg
     for ref in list(_footer_refs):
@@ -33,6 +38,10 @@ def _refresh_footer(container: ft.Container):
 
 
 def build_footer_bar() -> ft.Container:
+    """Build the app-wide footer bar control.
+
+    Registers itself so ``set_rate_limit_error`` can update it in place.
+    """
     ref = ft.Ref[ft.Container]()
     _footer_refs.append(ref)
 

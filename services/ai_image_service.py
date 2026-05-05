@@ -150,6 +150,13 @@ def generate_character_portrait(
     on_status=None,
     cancel_event: threading.Event = None,
 ) -> str:
+    """Generate a portrait image for a character using the AI image model.
+
+    Saves the result in ``project_dir/images/characters/`` and updates
+    ``character.image_path``. Retries up to 2 times with a sanitized
+    description if the content policy blocks the image.
+    Returns the path to the saved image.
+    """
     set_rate_limit_error(None)
     art_style = _resolve_art_style(art_style)
     _init_vertex()
@@ -251,6 +258,13 @@ def generate_environment_image(
     on_status=None,
     cancel_event: threading.Event = None,
 ) -> str:
+    """Generate a landscape image for an environment using the AI image model.
+
+    Saves the result in ``project_dir/images/environments/`` and updates
+    ``environment.image_path``. Respects the environment's ``aspect_ratio`` setting.
+    Retries with a sanitized description on content policy errors.
+    Returns the path to the saved image.
+    """
     set_rate_limit_error(None)
     art_style = _resolve_art_style(art_style)
     _init_vertex()
@@ -360,6 +374,13 @@ def generate_scene_image(
     on_status=None,
     cancel_event: threading.Event = None,
 ) -> str:
+    """Generate an illustration for a scene, using character and environment images as references.
+
+    Sends up to 5 character portrait images and the environment image alongside
+    the scene description to the model. Saves the result in
+    ``project_dir/images/scenes/`` and updates ``scene.image_path``.
+    Returns the path to the saved image.
+    """
     set_rate_limit_error(None)
     art_style = _resolve_art_style(art_style)
     _init_vertex()
@@ -542,6 +563,12 @@ def edit_image(
 
 
 def undo_image_edit(entity) -> bool:
+    """Revert the entity's image to the previous state in its history.
+
+    Pops the last entry from ``image_path_history`` and ``refinement_history``
+    and sets ``entity.image_path`` to the previous path.
+    Returns True if the rollback succeeded, False if there was nothing to undo.
+    """
     # image_path_history[i] = path before refinement i was applied
     img_history = getattr(entity, "image_path_history", None)
     ref_history = getattr(entity, "refinement_history", None)

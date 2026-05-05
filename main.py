@@ -41,6 +41,7 @@ ACCENT = "#7c3aed"
 
 
 def pick_project_folder():
+    """Open a native folder-picker dialog and return the selected Path, or None if cancelled."""
     root = tk.Tk()
     root.withdraw()
     root.attributes("-topmost", True)
@@ -52,6 +53,11 @@ def pick_project_folder():
 
 
 def main(page: ft.Page):
+    """Flet entry point — sets up the page, stores and top-level navigation.
+
+    Manages the ``workspace_views`` cache so each tab's view is built once and
+    reused across tab switches, keeping background generation threads alive.
+    """
     page.title = "Aillustrate"
     page.window.width = 1600
     page.window.height = 950

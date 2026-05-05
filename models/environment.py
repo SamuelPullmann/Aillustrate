@@ -5,6 +5,11 @@ import uuid
 
 @dataclass
 class Environment:
+    """Represents a location or setting extracted from the book.
+
+    ``aspect_ratio`` controls the generated image orientation (e.g. ``"16:9"``, ``"9:16"``).
+    ``image_path_history`` and ``refinement_history`` enable undo/rollback of image edits.
+    """
     name: str
     merged_description: str = ""
     descriptions_by_chapter: list[str] = field(default_factory=list)

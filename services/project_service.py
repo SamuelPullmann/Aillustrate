@@ -16,6 +16,7 @@ PROJECTS_DIR = PROJECT_ROOT / "Projects"
 
 
 def get_project_dir(project_name: str) -> Path:
+    """Return the expected folder path for a project with the given name."""
     return PROJECTS_DIR / project_name
 
 
@@ -24,6 +25,11 @@ def _ensure_dir(path: Path) -> None:
 
 
 def create_project(title: str, art_style: str, source_file_path: str = None) -> tuple[Project, Path]:
+    """Create a new project folder with the required directory structure.
+
+    Copies the source file into the project's source/ subfolder if provided.
+    Returns the initialized Project object and its folder path.
+    """
     clean_title = title.replace('\u0000', '').replace('\x00', '').strip()
     safe_name = "".join(c if c.isalnum() or c in (" ", "-", "_") else "_" for c in clean_title).strip()
     if not safe_name:
@@ -56,6 +62,7 @@ def create_project(title: str, art_style: str, source_file_path: str = None) -> 
 
 
 def save_project(project: Project, project_dir: Path) -> None:
+    """Serialize the project to project.json inside the given folder."""
     _ensure_dir(project_dir)
     data = _project_to_dict(project)
     json_path = project_dir / "project.json"
@@ -63,6 +70,10 @@ def save_project(project: Project, project_dir: Path) -> None:
 
 
 def load_project(project_dir: Path) -> Project:
+    """Load and deserialize a project from project.json in the given folder.
+
+    Raises FileNotFoundError if no project file is found.
+    """
     json_path = project_dir / "project.json"
     if not json_path.exists():
         raise FileNotFoundError(f"No project.json found in {project_dir}")
@@ -72,6 +83,7 @@ def load_project(project_dir: Path) -> Project:
 
 
 def delete_asset_image(image_path: str | None) -> None:
+    """Delete an image file from disk. Does nothing if the path is None or the file does not exist."""
     if not image_path:
         return
     p = Path(image_path)
@@ -80,11 +92,17 @@ def delete_asset_image(image_path: str | None) -> None:
 
 
 def delete_project(project_dir: Path) -> None:
+    """Permanently delete a project folder and all its contents."""
     if project_dir.exists():
         shutil.rmtree(project_dir)
 
 
 def list_projects() -> list[dict]:
+    """Return metadata for all projects found in the Projects directory.
+
+    Each entry contains id, title, date, dir_path, and bg_color.
+    Projects are sorted by last-modified time, newest first.
+    """
     if not PROJECTS_DIR.exists():
         return []
 
@@ -205,6 +223,11 @@ def _dict_to_project(d: dict) -> Project:
 
 
 def save_project_as(project: Project, new_project_dir: Path) -> None:
+    """Copy a project to a new folder, updating all image paths to the new location.
+
+    Images for characters, environments and scenes are copied into the new folder images/ subfolders.
+    The project JSON is then saved in the new location.
+    """
     _ensure_dir(new_project_dir)
     chars_dir = new_project_dir / "images" / "characters"
     envs_dir = new_project_dir / "images" / "environments"

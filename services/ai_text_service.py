@@ -113,6 +113,12 @@ def _analyze_entity(chapter_text: str, entity_type: str, extra_replacements: dic
 
 
 def analyze_chapter(chapter_text: str, existing_char_names: list[str] | None = None, existing_env_names: list[str] | None = None) -> dict:
+    """Analyze a single chapter's text with AI and extract characters, environments and scenes.
+
+    Passing already-known names via ``existing_char_names`` / ``existing_env_names``
+    helps the AI reuse consistent naming instead of creating duplicates.
+    Returns a dict with keys ``characters``, ``environments`` and ``scenes``.
+    """
     from config import MAX_SCENES_PER_CHAPTER, ANALYZE_CHARACTERS, ANALYZE_SCENES, ANALYZE_ENVIRONMENTS
 
     char_context = ""
@@ -223,6 +229,14 @@ def analyze_all_chapters(
     on_progress: callable = None,
     character_threshold: float = 0,
 ) -> tuple[list[Character], list[Environment]]:
+    """Analyze all chapters and return de-duplicated lists of characters and environments.
+
+    Runs chapter analysis sequentially, merges per-chapter descriptions with AI,
+    then does a second pass to resolve any scene links that were missing on the first pass.
+    Characters that appear in fewer chapters than the ``character_threshold`` percentage
+    are removed, unless they are referenced in a scene.
+    Calls ``on_progress(message)`` after each chapter if provided.
+    """
     def _report(msg: str):
         if on_progress:
             on_progress(msg)

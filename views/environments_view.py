@@ -27,6 +27,13 @@ def _initials(name: str) -> str:
 
 
 def build_environments_view(page: ft.Page, on_tab_change, project_store: ProjectStore = None, ui_store=None, on_home=None, on_save=None, on_save_as=None) -> ft.Column:
+    """Build the Environments tab view.
+
+    Shows a sidebar list of all environments, a central image canvas and a right
+    panel with description, aspect ratio selector, seed controls and refinement history.
+    Supports AI landscape generation, image refinement via the chat input,
+    undo/rollback of refinements and manual environment creation.
+    """
     project = project_store.current_project if project_store else None
     environments = project.environments if project else []
 
